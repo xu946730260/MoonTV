@@ -78,6 +78,13 @@ export default async function RootLayout({
     }));
   }
 
+  // 未配置图片代理时，默认使用内置代理接口 /api/image-proxy，
+  // 避免海报直连豆瓣图床被 Referer 防盗链 403 拦掉；
+  // 如需自定义代理，可设置环境变量 NEXT_PUBLIC_IMAGE_PROXY 覆盖
+  if (!imageProxy) {
+    imageProxy = '/api/image-proxy?url=';
+  }
+
   // 将运行时配置注入到全局 window 对象，供客户端在运行时读取
   const runtimeConfig = {
     STORAGE_TYPE: process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage',
